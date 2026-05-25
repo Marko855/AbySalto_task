@@ -1,0 +1,17 @@
+hr/abysalto/hiring/api/junior/model/OrderItem.class
+hr/abysalto/hiring/api/junior/model/OrderStatus.class
+hr/abysalto/hiring/api/junior/configuration/SwaggerConfig.class
+hr/abysalto/hiring/api/junior/repository/BuyerRepository.class
+hr/abysalto/hiring/api/junior/manager/BuyerManager.class
+hr/abysalto/hiring/api/junior/controller/PingController.class
+hr/abysalto/hiring/api/junior/configuration/SecurityConfig.class
+hr/abysalto/hiring/api/junior/controller/BuyerController.class
+hr/abysalto/hiring/api/junior/model/PaymentOption.class
+hr/abysalto/hiring/api/junior/controller/InitDataController.class
+hr/abysalto/hiring/api/junior/manager/BuyerManagerImpl.class
+hr/abysalto/hiring/api/junior/model/Buyer.class
+hr/abysalto/hiring/api/junior/Application.class
+hr/abysalto/hiring/api/junior/configuration/SecurityConfig$1.class
+hr/abysalto/hiring/api/junior/components/DatabaseInitializer.class
+hr/abysalto/hiring/api/junior/model/BuyerAddress.class
+hr/abysalto/hiring/api/junior/model/Order.class
