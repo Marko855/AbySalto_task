@@ -2,52 +2,78 @@ package hr.abysalto.hiring.api.junior.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.annotation.AccessType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 
-import lombok.Data;
+import lombok.Data; // <-- DODAN IMPORT
 
 @Data
 @AccessType(AccessType.Type.PROPERTY)
+@Table("ORDER_TABLE")
 public class Order {
-	@Id
-	private Long orderNr;
-	private Long buyerId;
-	private Buyer buyer;
-	private Double totalAmount;
+    @Id
+    private Long orderNr;
+    private Long buyerId;
+    private Buyer buyer;
+    private Double totalAmount;
 
-	@Transient
-	private OrderStatus orderStatus;
+    @Transient
+    private OrderStatus orderStatus;
 
-	@Column("order_status")
-	public String getStringOrderStatus() {
-		return this.orderStatus.toString();
-	}
+    @Column("ORDER_STATUS")
+    public String getStringOrderStatus() {
+        if (this.orderStatus == null) {
+            return null; 
+        }
+        return this.orderStatus.toString();
+    }
 
-	public void setStringOrderStatus(String orderStatusString) {
-		this.orderStatus = OrderStatus.fromString(orderStatusString);
-	}
+    public void setStringOrderStatus(String orderStatusString) {
+        if (orderStatusString == null || orderStatusString.trim().isEmpty() || orderStatusString.equals("string")) {
+            this.orderStatus = null;
+        } else {
+            this.orderStatus = OrderStatus.fromString(orderStatusString);
+        }
+    }
 
-	private LocalDateTime orderTime;
-	private List<OrderItem> orderItems;
+    private LocalDateTime orderTime;
+    
+    private java.util.Set<OrderItem> orderItems;
 
-	@Transient
-	private PaymentOption paymentOption;
+    @MappedCollection(idColumn = "ORDER_NR")
+    public java.util.Set<OrderItem> getOrderItems() {
+        return this.orderItems;
+    }
 
-	@Column("payment_option")
-	public String getStringPaymentOption() {
-		return this.paymentOption.toString();
-	}
+    public void setOrderItems(java.util.Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
-	public void setStringPaymentOption(String paymentOptionString) {
-		this.paymentOption = PaymentOption.fromString(paymentOptionString);
-	}
+    @Transient
+    private PaymentOption paymentOption;
 
-	// ## method for calculating price
+    @Column("PAYMENT_OPTION")
+    public String getStringPaymentOption() {
+        if (this.paymentOption == null) {
+            return null; 
+        }
+        return this.paymentOption.toString();
+    }
+
+    public void setStringPaymentOption(String paymentOptionString) {
+        if (paymentOptionString == null || paymentOptionString.trim().isEmpty() || paymentOptionString.equals("string")) {
+            this.paymentOption = null;
+        } else {
+            this.paymentOption = PaymentOption.fromString(paymentOptionString);
+        }
+    }
+
+    // ## method for calculating price
     public void calculateTotalAmount() {
         BigDecimal total = BigDecimal.ZERO; 
         
@@ -60,16 +86,14 @@ public class Order {
                 }
             }
         }
-        // ## totalPrice is BigDecimal
         this.totalPrice = total; 
-        // ## totalAmount is dobule
         this.totalAmount = total.doubleValue(); 
     }
-	
-	private String note;
-	private Long deliveryAddressId;
-	private BuyerAddress deliveryAddress;
-	private String contactNumber;
-	private String currency;
-	private BigDecimal totalPrice;
+    
+    private String note;
+    private Long deliveryAddressId;
+    private BuyerAddress deliveryAddress;
+    private String contactNumber;
+    private String currency;
+    private BigDecimal totalPrice;
 }

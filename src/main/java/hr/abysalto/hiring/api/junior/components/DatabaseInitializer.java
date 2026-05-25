@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class DatabaseInitializer {
 	@Autowired
@@ -15,11 +17,14 @@ public class DatabaseInitializer {
 		return this.dataInitialized;
 	}
 
-	public void initialize() {
-		initTables();
-		initData();
-		this.dataInitialized = true;
-	}
+	@PostConstruct
+    public void initialize() {
+        if (!dataInitialized) { 
+            initTables();
+            initData();
+            this.dataInitialized = true;
+        }
+    }
 
 	private void initTables() {
 		this.jdbcTemplate.execute("""
@@ -40,34 +45,36 @@ public class DatabaseInitializer {
 			 );
  		""");
 
-		this.jdbcTemplate.execute("""
-			 CREATE TABLE "order" (
-				 order_nr INT auto_increment PRIMARY KEY,
-				 buyer_id int NOT NULL,
-				 order_status varchar(32) NOT NULL,
-				 order_time datetime NOT NULL,
-				 delivery_address_id INT NOT NULL,
-				 contact_number varchar(100) NULL,
-				 currency varchar(50) NULL,
-				 total_price decimal,
-				 CONSTRAINT FK_order_to_buyer FOREIGN KEY (buyer_id) REFERENCES buyer (buyer_id),
-				 CONSTRAINT FK_order_to_delivery_address FOREIGN KEY (delivery_address_id) REFERENCES buyer_address (buyer_address_id)
-			 );
- 		""");
+        this.jdbcTemplate.execute("""
+             CREATE TABLE order_table (
+                 order_nr INT auto_increment PRIMARY KEY,
+                 buyer_id int NOT NULL,
+                 order_status varchar(32) NOT NULL,
+                 order_time datetime NOT NULL,
+                 payment_option varchar(32) NULL,
+                 total_amount decimal NULL,
+                 delivery_address_id INT,
+                 contact_number varchar(100) NULL,
+                 currency varchar(50) NULL,
+                 total_price decimal,
+				 note varchar(255) NULL,
+                 CONSTRAINT FK_order_to_buyer FOREIGN KEY (buyer_id) REFERENCES buyer (buyer_id),
+                 CONSTRAINT FK_order_to_delivery_address FOREIGN KEY (delivery_address_id) REFERENCES buyer_address (buyer_address_id)
+             );
+        """);
 
 		this.jdbcTemplate.execute("""
-			 CREATE TABLE order_item (
-				 order_item_id INT auto_increment PRIMARY KEY,
-				 order_nr int NOT NULL,
-				 item_nt smallint NOT NULL,
-				 name varchar(100) NOT NULL,
-				 quantity smallint NOT NULL,
-				 price decimal,
-				 CONSTRAINT UC_order_items UNIQUE (order_item_id, order_nr),
-				 CONSTRAINT FK_order_item_to_order FOREIGN KEY (order_nr) REFERENCES "order" (order_nr)
-			 );
- 		""");
-	}
+			CREATE TABLE order_item (
+				order_item_id INT auto_increment PRIMARY KEY,
+				order_nr int NOT NULL,   -- 1. Promijenjeno u order_nr da odgovara Springu
+				name varchar(100) NOT NULL,
+				quantity smallint NOT NULL,
+				price decimal,
+				-- 2. Uklonjen je 'item_nt' jer koristimo Set (ne Listu)
+				CONSTRAINT FK_order_item_to_order FOREIGN KEY (order_nr) REFERENCES order_table (order_nr)
+			);
+	   """);
+    }
 
 	private void initData() {
 		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jabba', 'Hutt', 'the')");
