@@ -1,5 +1,7 @@
 package hr.abysalto.hiring.api.junior.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +42,10 @@ public class OrderController {
         return orderService.getOrderById(orderNr)
                 .map(order -> new ResponseEntity<>(order, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrders() {
+    return ResponseEntity.ok(orderService.getAllOrders());
     }
 }

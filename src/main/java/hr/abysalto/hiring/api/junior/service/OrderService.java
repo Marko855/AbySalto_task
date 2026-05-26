@@ -6,6 +6,8 @@
 package hr.abysalto.hiring.api.junior.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +42,11 @@ public class OrderService {
 
     public Optional<Order> getOrderById(Long orderNr){
         return orderRepository.findById(orderNr);
+    }
+
+    public List<Order> getAllOrders(){
+        List<Order> orders=new ArrayList<>();
+        orderRepository.findAll().forEach(orders::add);
+        return orders;
     }
 }

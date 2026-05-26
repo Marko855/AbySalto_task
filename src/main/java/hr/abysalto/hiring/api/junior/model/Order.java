@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import lombok.Data; // <-- DODAN IMPORT
+import lombok.Data; 
 
 @Data
 @AccessType(AccessType.Type.PROPERTY)
