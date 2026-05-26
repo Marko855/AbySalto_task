@@ -20,31 +20,40 @@ public class OrderService {
 
     //## dependency injeciton
     @Autowired
-    public OrderService(OrderRepository orderRepository){
-        this.orderRepository=orderRepository;
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 
     @Transactional
-    public Order createOrder(Order order){
+    public Order createOrder(Order order) {
         order.setOrderTime(LocalDateTime.now());
-        
+
         order.setOrderStatus(OrderStatus.WAITING_FOR_CONFIRMATION);
-        
+
         order.calculateTotalAmount();
-        
+
         return orderRepository.save(order);
     }
 
-    public Optional<Order> getOrderById(Long orderNr){
+    public Optional<Order> getOrderById(Long orderNr) {
         return orderRepository.findById(orderNr);
     }
 
     public List<Order> getAllOrders(String sortDirection) {
-        Sort sort = "desc".equalsIgnoreCase(sortDirection) ? 
-                    Sort.by("totalAmount").descending() : 
-                    Sort.by("totalAmount").ascending();
-                    
+        Sort sort = "desc".equalsIgnoreCase(sortDirection)
+                ? Sort.by("totalAmount").descending()
+                : Sort.by("totalAmount").ascending();
+
         return orderRepository.findAll(sort);
+    }
+
+    @Transactional
+    public Order updateOrderStatus(Long orderNr, OrderStatus newStatus) {
+        Order order = orderRepository.findById(orderNr).orElseThrow(() -> new IllegalArgumentException(
+                "Narudzba s brojem" + orderNr + " ne postoji"
+        ));
+        order.setOrderStatus(newStatus);
+        return orderRepository.save(order);
     }
 
 }

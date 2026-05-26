@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hr.abysalto.hiring.api.junior.model.Order;
+import hr.abysalto.hiring.api.junior.model.OrderStatus;
 import hr.abysalto.hiring.api.junior.service.OrderService;
 
 @RestController
@@ -25,16 +27,16 @@ public class OrderController {
 
     //## dependency injeciton
     @Autowired
-    public OrderController(OrderService orderService){
-        this.orderService=orderService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     //## endpoint for creating new order 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        Order savedOrder=orderService.createOrder(order);
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        Order savedOrder = orderService.createOrder(order);
 
-        return new ResponseEntity<>(savedOrder,HttpStatus.CREATED);
+        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/{orderNr}")
@@ -46,7 +48,17 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders(@RequestParam(required=false,defaultValue="asc") String sort) {
-    return ResponseEntity.ok(orderService.getAllOrders(sort));
+    public ResponseEntity<List<Order>> getAllOrders(@RequestParam(required = false, defaultValue = "asc") String sort) {
+        return ResponseEntity.ok(orderService.getAllOrders(sort));
+    }
+
+    @PatchMapping("/{orderNr}/status")
+    public ResponseEntity<Order> updateStatus(
+            @PathVariable Long orderNr,
+            @RequestParam OrderStatus status) {
+
+        Order updatedOrder = orderService.updateOrderStatus(orderNr, status);
+
+        return ResponseEntity.ok(updatedOrder);
     }
 }
