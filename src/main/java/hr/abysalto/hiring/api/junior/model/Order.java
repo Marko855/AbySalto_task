@@ -19,6 +19,8 @@ public class Order {
     @Id
     private Long orderNr;
     private Long buyerId;
+
+	@Transient
     private Buyer buyer;
     private Double totalAmount;
 
@@ -92,6 +94,8 @@ public class Order {
     
     private String note;
     private Long deliveryAddressId;
+	
+	@Transient
     private BuyerAddress deliveryAddress;
     private String contactNumber;
     private String currency;
