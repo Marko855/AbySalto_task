@@ -11,17 +11,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hr.abysalto.hiring.api.junior.model.Order;
 import hr.abysalto.hiring.api.junior.model.OrderStatus;
+import hr.abysalto.hiring.api.junior.repository.BuyerAddressRepository;
+import hr.abysalto.hiring.api.junior.repository.BuyerRepository;
 import hr.abysalto.hiring.api.junior.repository.OrderRepository;
 
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final BuyerRepository buyerRepository;
+    private final BuyerAddressRepository buyerAddressRepository;
 
     //## dependency injeciton
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository,
+            BuyerRepository buyerRepository,
+            BuyerAddressRepository buyerAddressRepository) {
         this.orderRepository = orderRepository;
+        this.buyerRepository = buyerRepository;
+        this.buyerAddressRepository = buyerAddressRepository;
     }
 
     @Transactional
@@ -32,11 +40,16 @@ public class OrderService {
 
         order.calculateTotalAmount();
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        populateTransientFields(savedOrder);
+        return savedOrder;
     }
 
     public Optional<Order> getOrderById(Long orderNr) {
-        return orderRepository.findById(orderNr);
+        Optional<Order> orderOptional = orderRepository.findById(orderNr);
+        orderOptional.ifPresent(this::populateTransientFields);
+        return orderOptional;
     }
 
     public List<Order> getAllOrders(String sortDirection) {
@@ -44,7 +57,12 @@ public class OrderService {
                 ? Sort.by("totalAmount").descending()
                 : Sort.by("totalAmount").ascending();
 
-        return orderRepository.findAll(sort);
+        List<Order> orders = orderRepository.findAll(sort);
+
+        for (Order order : orders) {
+            populateTransientFields(order);
+        }
+        return orders;
     }
 
     @Transactional
@@ -53,7 +71,18 @@ public class OrderService {
                 "Narudzba s brojem" + orderNr + " ne postoji"
         ));
         order.setOrderStatus(newStatus);
-        return orderRepository.save(order);
+        Order updatedOrder = orderRepository.save(order);
+        populateTransientFields(updatedOrder);
+        return updatedOrder;
+    }
+
+    private void populateTransientFields(Order order) {
+        if (order.getBuyerId() != null) {
+            buyerRepository.findById(order.getBuyerId()).ifPresent(order::setBuyer);
+        }
+        if (order.getDeliveryAddressId() != null) {
+            buyerAddressRepository.findById(order.getDeliveryAddressId()).ifPresent(order::setDeliveryAddress);
+        }
     }
 
 }

@@ -82,5 +82,9 @@ public class DatabaseInitializer {
 		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jar Jar', 'Binks', NULL)");
 		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Han', 'Solo', NULL)");
 		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Leia', 'Organa', 'Princess')");
+		
+		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Tatooine', 'Mos Eisley Blvd', '1A')"); // ID: 1
+		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Coruscant', 'Jedi Temple Way', '42')"); // ID: 2
+		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Alderaan', 'Royal Palace Square', '5')"); // ID: 3
 	}
 }
