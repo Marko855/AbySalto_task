@@ -32,6 +32,8 @@ public class SecurityConfig {
 			}).authorizeHttpRequests(authorizeRequests ->
 			   authorizeRequests.requestMatchers("/swagger-ui/**").permitAll()
 								.requestMatchers("/v3/api-docs*/**").permitAll()
+								.requestMatchers("/ui/buyer", "/ui/buyer/").permitAll()
+                                .requestMatchers("/ui/buyer/**").permitAll()
 								.anyRequest().authenticated())
 			.httpBasic(Customizer.withDefaults())
 			.formLogin(Customizer.withDefaults());

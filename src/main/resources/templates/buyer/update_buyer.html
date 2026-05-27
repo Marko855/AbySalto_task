@@ -13,7 +13,7 @@
   <hr>
   <h2>Update existing buyer</h2>
 
-  <form action="#" th:action="@{/buyer/save}" th:object="${buyer}"
+  <form action="#" th:action="@{/ui/buyer/save}" th:object="${buyer}"
         method="POST">
 
     <!-- Add hidden form field to handle update -->
@@ -29,7 +29,7 @@
 
   <hr>
 
-  <a th:href = "@{/buyer/}"> Back to list of buyers</a>
+  <a th:href = "@{/ui/buyer/}"> Back to list of buyers</a>
 </div>
 </body>
 </html>

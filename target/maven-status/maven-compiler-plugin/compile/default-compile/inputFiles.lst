@@ -3,6 +3,7 @@
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/configuration/SecurityConfig.java
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/configuration/SwaggerConfig.java
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/controller/BuyerController.java
+/Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/controller/BuyerViewController.java
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/controller/InitDataController.java
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/controller/OrderController.java
 /Users/markodananic/Desktop/Abysalto_rjesenje/src/main/java/hr/abysalto/hiring/api/junior/controller/PingController.java

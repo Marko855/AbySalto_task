@@ -18,7 +18,7 @@
   <hr>
   <h2>Add new buyer</h2>
 
-  <form action="#" th:action="@{/buyer/save}" th:object="${buyer}"
+  <form action="#" th:action="@{/ui/buyer/save}" th:object="${buyer}"
         method="POST">
     <input type="text" th:field="*{firstName}" placeholder="First Name"
            class="form-control mb-4 col-4">
@@ -32,7 +32,7 @@
 
   <hr>
 
-  <a th:href="@{/buyer/}"> Back to list of buyers</a>
+  <a th:href="@{/ui/buyer/}"> Back to list of buyers</a>
 </div>
 </body>
 </html>

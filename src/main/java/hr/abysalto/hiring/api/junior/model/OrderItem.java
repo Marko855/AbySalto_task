@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 
 import lombok.Data;
 
-//automatski generira gettere i settere
 @Data
 public class OrderItem {
 	@Id
