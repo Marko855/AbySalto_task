@@ -8,26 +8,27 @@ import jakarta.annotation.PostConstruct;
 
 @Component
 public class DatabaseInitializer {
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 
-	private boolean dataInitialized = false;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	public boolean isDataInitialized() {
-		return this.dataInitialized;
-	}
+    private boolean dataInitialized = false;
 
-	@PostConstruct
+    public boolean isDataInitialized() {
+        return this.dataInitialized;
+    }
+
+    @PostConstruct
     public void initialize() {
-        if (!dataInitialized) { 
+        if (!dataInitialized) {
             initTables();
             initData();
             this.dataInitialized = true;
         }
     }
 
-	private void initTables() {
-		this.jdbcTemplate.execute("""
+    private void initTables() {
+        this.jdbcTemplate.execute("""
 			 CREATE TABLE buyer (
 				 buyer_id INT auto_increment PRIMARY KEY,
 				 first_name varchar(100) NOT NULL,
@@ -36,7 +37,7 @@ public class DatabaseInitializer {
 			 );
  		""");
 
-		this.jdbcTemplate.execute("""
+        this.jdbcTemplate.execute("""
 			 CREATE TABLE buyer_address (
 				 buyer_address_id INT auto_increment PRIMARY KEY,
 				 city varchar(100) NOT NULL,
@@ -63,28 +64,28 @@ public class DatabaseInitializer {
              );
         """);
 
-		this.jdbcTemplate.execute("""
-			CREATE TABLE order_item (
-				order_item_id INT auto_increment PRIMARY KEY,
-				order_nr int NOT NULL,   -- 1. Promijenjeno u order_nr da odgovara Springu
-				name varchar(100) NOT NULL,
-				quantity smallint NOT NULL,
-				price decimal,
-				-- 2. Uklonjen je 'item_nt' jer koristimo Set (ne Listu)
-				CONSTRAINT FK_order_item_to_order FOREIGN KEY (order_nr) REFERENCES order_table (order_nr)
-			);
-	   """);
+        this.jdbcTemplate.execute("""
+    CREATE TABLE order_item (
+        order_item_id INT auto_increment PRIMARY KEY,
+        order_nr int NOT NULL,
+        order_items_key int,    -- DODAJ OVO!
+        name varchar(100) NOT NULL,
+        quantity smallint NOT NULL,
+        price decimal,
+        CONSTRAINT FK_order_item_to_order FOREIGN KEY (order_nr) REFERENCES order_table (order_nr)
+    );
+""");
     }
 
-	private void initData() {
-		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jabba', 'Hutt', 'the')");
-		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Anakin', 'Skywalker', NULL)");
-		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jar Jar', 'Binks', NULL)");
-		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Han', 'Solo', NULL)");
-		this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Leia', 'Organa', 'Princess')");
-		
-		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Tatooine', 'Mos Eisley Blvd', '1A')"); // ID: 1
-		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Coruscant', 'Jedi Temple Way', '42')"); // ID: 2
-		this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Alderaan', 'Royal Palace Square', '5')"); // ID: 3
-	}
+    private void initData() {
+        this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jabba', 'Hutt', 'the')");
+        this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Anakin', 'Skywalker', NULL)");
+        this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Jar Jar', 'Binks', NULL)");
+        this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Han', 'Solo', NULL)");
+        this.jdbcTemplate.execute("INSERT INTO buyer (first_name, last_name, title) VALUES ('Leia', 'Organa', 'Princess')");
+
+        this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Tatooine', 'Mos Eisley Blvd', '1A')"); // ID: 1
+        this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Coruscant', 'Jedi Temple Way', '42')"); // ID: 2
+        this.jdbcTemplate.execute("INSERT INTO buyer_address (city, street, home_number) VALUES ('Alderaan', 'Royal Palace Square', '5')"); // ID: 3
+    }
 }

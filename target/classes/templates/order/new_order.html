@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Order</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container my-4">
+        <h1>Order Management</h1>
+        <hr>
+        <h2>Create new order</h2>
+
+        <form th:action="@{/ui/order/save}" th:object="${order}" method="post" class="w-50">
+
+            <div class="form-group">
+                <label for="buyer">Select Buyer:</label>
+                <select th:field="*{buyerId}" class="form-control" id="buyer" required>
+                    <option value="">-- Choose a buyer --</option>
+                    <option th:each="b : ${allBuyers}" th:value="${b.buyerId}"
+                        th:text="${b.firstName + ' ' + b.lastName}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="contactNumber">Contact Number:</label>
+                <input type="text" th:field="*{contactNumber}" id="contactNumber" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="deliveryAddressId">Delivery Address ID:</label>
+                <input type="number" th:field="*{deliveryAddressId}" id="deliveryAddressId" class="form-control"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="currency">Currency:</label>
+                <input type="text" th:field="*{currency}" id="currency" class="form-control" placeholder="EUR" required>
+            </div>
+
+            <hr>
+            <h4>Item Details</h4>
+
+            <div class="form-group">
+                <label for="itemName">Article Name:</label>
+                <input type="text" th:field="*{orderItems[0].name}" id="itemName" class="form-control"
+                    placeholder="E.g. Laptop" required>
+            </div>
+
+            <div class="form-group">
+                <label for="itemPrice">Price (€):</label>
+                <input type="number" step="0.01" th:field="*{orderItems[0].price}" id="itemPrice" class="form-control"
+                    placeholder="0.00" required>
+            </div>
+
+            <div class="form-group">
+                <label for="itemQuantity">Quantity:</label>
+                <input type="number" th:field="*{orderItems[0].quantity}" id="itemQuantity" class="form-control"
+                    value="1" min="1" required>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label for="paymentOption">Payment Option:</label>
+                <select th:field="*{paymentOption}" id="paymentOption" class="form-control">
+                    <option value="CASH">Cash</option>
+                    <option value="CARD_UPFRONT">Card Upfront</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="note">Note:</label>
+                <textarea th:field="*{note}" id="note" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">Place Order</button>
+        </form>
+
+        <hr>
+        <a th:href="@{/ui/order}" class="btn btn-secondary">Back to list of orders</a>
+    </div>
+</body>
+
+</html>

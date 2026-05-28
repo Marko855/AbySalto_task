@@ -2,7 +2,6 @@ package hr.abysalto.hiring.api.junior.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +25,6 @@ public class OrderController {
     private final OrderService orderService;
 
     //## dependency injeciton
-    @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }

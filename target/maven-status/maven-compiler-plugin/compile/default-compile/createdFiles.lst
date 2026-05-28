@@ -2,6 +2,7 @@ hr/abysalto/hiring/api/junior/configuration/SwaggerConfig.class
 hr/abysalto/hiring/api/junior/repository/BuyerRepository.class
 hr/abysalto/hiring/api/junior/controller/BuyerController.class
 hr/abysalto/hiring/api/junior/model/PaymentOption.class
+hr/abysalto/hiring/api/junior/controller/OrderViewController.class
 hr/abysalto/hiring/api/junior/controller/BuyerViewController.class
 hr/abysalto/hiring/api/junior/Application.class
 hr/abysalto/hiring/api/junior/configuration/SecurityConfig$1.class

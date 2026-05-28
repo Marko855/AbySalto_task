@@ -34,6 +34,8 @@ public class SecurityConfig {
 								.requestMatchers("/v3/api-docs*/**").permitAll()
 								.requestMatchers("/ui/buyer", "/ui/buyer/").permitAll()
                                 .requestMatchers("/ui/buyer/**").permitAll()
+								.requestMatchers("/ui/order", "/ui/order/").permitAll()
+                                .requestMatchers("/ui/order/**").permitAll()
 								.anyRequest().authenticated())
 			.httpBasic(Customizer.withDefaults())
 			.formLogin(Customizer.withDefaults());
